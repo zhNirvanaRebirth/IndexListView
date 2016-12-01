@@ -15,11 +15,11 @@ public class IndexListView extends ListView {
     private View mIndexView;//索引栏View
 
     public IndexListView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public IndexListView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, R.attr.IndexListViewDefStyle);
     }
 
     public IndexListView(Context context, AttributeSet attrs, int defStyleAttr) {
