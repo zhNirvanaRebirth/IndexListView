@@ -3,5 +3,9 @@
     <attr name="IndexListViewDefStyle" format="reference" />
     <declare-styleable name="IndexListView">
         <attr name="groupTextColor" format="color" />
+        <attr name="groupViewWidth" format="dimension" />
+        <attr name="groupViewHeight" format="dimension" />
+        <attr name="indexViewWidth" format="dimension" />
+        <attr name="indexViewHeight" format="dimension" />
     </declare-styleable>
 </resources>
