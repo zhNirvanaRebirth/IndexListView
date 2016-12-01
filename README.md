@@ -1,0 +1,2 @@
+# IndexListView
+自定义的带索引及搜索功能的ListView，模仿现在主流联系人界面功能
