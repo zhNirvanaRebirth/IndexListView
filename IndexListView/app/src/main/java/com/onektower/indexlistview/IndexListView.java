@@ -32,6 +32,9 @@ public class IndexListView extends ListView {
     private int mIndexViewHeight;
     //索引栏与屏幕右边距
     private int mIndexViewMargin;
+    //控件的宽高
+    private int width;
+    private int height;
 
     private boolean mGroupViewVisiblity = true;
     private boolean mIndexViewVisiblity = false;
@@ -78,6 +81,10 @@ public class IndexListView extends ListView {
         this.mGroupViewVisiblity = mGroupViewVisiblity;
     }
 
+    public void setmIndexViewVisiblity(boolean mIndexViewVisiblity) {//设置索引栏可见性
+        this.mIndexViewVisiblity = mIndexViewVisiblity;
+    }
+
     private int dp2px(float dp) {
         float density = mContext.getResources().getDisplayMetrics().density;
         return (int) (density * dp + 0.5);
@@ -96,6 +103,47 @@ public class IndexListView extends ListView {
             measureChild(mIndexView, widthMeasureSpec, heightMeasureSpec);
             mIndexViewWidth = mIndexView.getMeasuredWidth();
             mIndexViewHeight = mIndexView.getMeasuredHeight();
+        }
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        width = w;
+        height = h;
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        if (mGroupView != null && mGroupViewVisiblity) {
+            mGroupView.layout(0, 0, mGroupViewWidth, mGroupViewHeight);
+            //TODO 计算分组栏的位置
+            configGroupView(getFirstVisiblePosition());
+        }
+        if (mIndexView != null && mIndexViewVisiblity) {
+            mIndexView.layout(width - mIndexViewWidth - mIndexViewMargin, mIndexViewMargin, width - mIndexViewMargin, height - mIndexViewMargin);
+        }
+    }
+
+    private void configGroupView(int position) {
+        if (mGroupView == null)
+            return;
+        int state = indexAdapter.getGroupState(position);
+        switch (state) {
+            case IGroup.GROUP_GONE:
+                mGroupViewVisiblity = false;
+                break;
+            case IGroup.GROUP_VISIBLE:
+                if (mGroupView.getTop() != 0) {
+                    mGroupView.layout(0, 0, mGroupViewWidth, mGroupViewHeight);
+                }
+                indexAdapter.configGroupView(mGroupView, position);
+                mGroupViewVisiblity = true;
+                break;
+            case IGroup.GROUP_UP:
+//                View firstView = getChildAt()
+                break;
         }
     }
 }

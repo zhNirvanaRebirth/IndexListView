@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
  * Created by zhwilson on 2016/12/1.
  * 适配器
  */
-public class IndexAdapter extends BaseAdapter {
+public class IndexAdapter extends BaseAdapter implements IGroup {
     @Override
     public int getCount() {
         return 0;
@@ -27,5 +27,15 @@ public class IndexAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         return null;
+    }
+
+    @Override
+    public int getGroupState(int position) {
+        return 0;
+    }
+
+    @Override
+    public void configGroupView(View group, int position) {
+
     }
 }
