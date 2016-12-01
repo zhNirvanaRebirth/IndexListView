@@ -7,5 +7,6 @@
         <attr name="groupViewHeight" format="dimension" />
         <attr name="indexViewWidth" format="dimension" />
         <attr name="indexViewHeight" format="dimension" />
+        <attr name="indexViewRightMargin" format="dimension" />
     </declare-styleable>
 </resources>

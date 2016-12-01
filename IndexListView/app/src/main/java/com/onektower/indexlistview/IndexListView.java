@@ -12,22 +12,29 @@ import android.widget.ListView;
  * 模仿手机联系人界面的listview
  */
 public class IndexListView extends ListView {
-    //左侧分组栏宽高
+    //左侧分组栏默认宽高
     private static final float GROUP_VIEW_WIDTH = 50;
     private static final float GROUP_VIEW_HEIGHT = 50;
-    //索引栏宽高
-    private static final float INDEX_VIEW_WIDTH = 10;
+    //索引栏默认宽高
+    private static final float INDEX_VIEW_WIDTH = 40;
     private static final float INDEX_VIEW_HEIGHT = 400;
+    //索引栏与屏幕的右边距
+    private static final float INDEX_VIEW_RIGHT_MARGIN = 10;
     private Context mContext;
     //需要的几个View
     private View mGroupView;//左侧分组View
     private View mIndexView;//索引栏View
-    //左侧分组栏默认宽高
-    private int mGroupViewWidthDef;
-    private int mGroupViewHeightDef;
-    //索引栏默认宽高
-    private int mIndexViewWidthDef;
-    private int mIndexViewHeightDef;
+    //左侧分组栏宽高
+    private int mGroupViewWidth;
+    private int mGroupViewHeight;
+    //索引栏宽高
+    private int mIndexViewWidth;
+    private int mIndexViewHeight;
+    //索引栏与屏幕右边距
+    private int mIndexViewMargin;
+
+    private boolean mGroupViewVisiblity = true;
+    private boolean mIndexViewVisiblity = false;
 
     private IndexAdapter indexAdapter;//适配器
 
@@ -44,10 +51,11 @@ public class IndexListView extends ListView {
         mContext = context;
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.IndexListView, defStyleAttr, 0);
-        mGroupViewWidthDef = typedArray.getInt(R.styleable.IndexListView_groupViewWidth, dp2px(GROUP_VIEW_WIDTH));
-        mGroupViewHeightDef = typedArray.getInt(R.styleable.IndexListView_groupViewHeight, dp2px(GROUP_VIEW_HEIGHT));
-        mIndexViewWidthDef = typedArray.getInt(R.styleable.IndexListView_indexViewWidth, dp2px(INDEX_VIEW_WIDTH));
-        mIndexViewHeightDef = typedArray.getInt(R.styleable.IndexListView_indexViewHeight, dp2px(INDEX_VIEW_HEIGHT));
+        mGroupViewWidth = typedArray.getInt(R.styleable.IndexListView_groupViewWidth, dp2px(GROUP_VIEW_WIDTH));
+        mGroupViewHeight = typedArray.getInt(R.styleable.IndexListView_groupViewHeight, dp2px(GROUP_VIEW_HEIGHT));
+        mIndexViewWidth = typedArray.getInt(R.styleable.IndexListView_indexViewWidth, dp2px(INDEX_VIEW_WIDTH));
+        mIndexViewHeight = typedArray.getInt(R.styleable.IndexListView_indexViewHeight, dp2px(INDEX_VIEW_HEIGHT));
+        mIndexViewMargin = typedArray.getInt(R.styleable.IndexListView_indexViewRightMargin, dp2px(INDEX_VIEW_RIGHT_MARGIN));
 
         typedArray.recycle();
     }
@@ -58,8 +66,36 @@ public class IndexListView extends ListView {
         super.setAdapter(adapter);
     }
 
+    public void setmGroupView(View mGroupView) {//设置左侧分组栏
+        this.mGroupView = mGroupView;
+    }
+
+    public void setmIndexView(View mIndexView) {//设置右侧索引栏
+        this.mIndexView = mIndexView;
+    }
+
+    public void setmGroupViewVisiblity(boolean mGroupViewVisiblity) {//设置分组栏可见性
+        this.mGroupViewVisiblity = mGroupViewVisiblity;
+    }
+
     private int dp2px(float dp) {
         float density = mContext.getResources().getDisplayMetrics().density;
         return (int) (density * dp + 0.5);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (mGroupView != null && mGroupViewVisiblity) {
+            measureChild(mGroupView, widthMeasureSpec, heightMeasureSpec);
+            mGroupViewWidth = mGroupView.getMeasuredWidth();
+            mGroupViewHeight = mGroupView.getMeasuredHeight();
+        }
+
+        if (mIndexView != null && mIndexViewVisiblity) {
+            measureChild(mIndexView, widthMeasureSpec, heightMeasureSpec);
+            mIndexViewWidth = mIndexView.getMeasuredWidth();
+            mIndexViewHeight = mIndexView.getMeasuredHeight();
+        }
     }
 }
